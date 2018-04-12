@@ -1,0 +1,13 @@
+{
+"companyName": "DefaultCompany",
+"productName": "Puzzlang",
+"dataUrl": "WebGL18c30.data.unityweb",
+"asmCodeUrl": "WebGL18c30.asm.code.unityweb",
+"asmMemoryUrl": "WebGL18c30.asm.memory.unityweb",
+"asmFrameworkUrl": "WebGL18c30.asm.framework.unityweb",
+"TOTAL_MEMORY": 268435456,
+"graphicsAPI": ["WebGL 2.0", "WebGL 1.0"],
+"webglContextAttributes": {"preserveDrawingBuffer": false},
+"splashScreenStyle": "Dark",
+"backgroundColor": "#231F20"
+}
