@@ -4,6 +4,6 @@ Puzzlang is a pattern language for abstract single-player games and puzzles, and
 
 Puzzlang implements a pattern language compatible with PuzzleScript, an incredibly ingenious creation of Stephen Lavelle. More [here](http://www.polyomino.com/puzzlescript) and [here](www.puzzlescript.net). Puzzlang has a compiler, a universal games engine and a player targeting Unity. This in turn can be used to create players for almost any platform: Windows desktop, Linux, WebGL, Android, iOS and so on.
 
-This is the Web Player, for anyone to use.
+This is the Web Player, for anyone to use. Latest release is 18d17.
 
-[Play!](WebGL/index.html)
+[Play PuzzlangWeb!](WebGL/index.html)
