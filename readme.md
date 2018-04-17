@@ -7,4 +7,5 @@ Puzzlang implements a pattern language compatible with PuzzleScript, an incredib
 This is the Web Player, for anyone to use. Latest release is 18d17.
 
 [Play PuzzlangWeb! (Local)](WebGL/index.html)
+
 [Play PuzzlangWeb! (on Github)](https://htmlpreview.github.io/?https://github.com/david-pfx/PuzzlangWeb/blob/master/WebGL/index.html)
