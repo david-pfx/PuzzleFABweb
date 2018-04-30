@@ -6,4 +6,4 @@ Puzzlang implements a pattern language compatible with PuzzleScript, an incredib
 
 This is the Web Player, for anyone to use. Latest release is 18d30.
 
-[Play 2048 on PuzzlangWeb!](https://david-pfx.github.io/PuzzlangWeb/)
+[Play 2048 on PuzzlangWeb!](https://david-pfx.github.io/PuzzlangWeb/WebGL)
