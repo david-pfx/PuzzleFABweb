@@ -2,7 +2,7 @@ title The Saga of the Candy Scroll
 author Jim Palmeri
 homepage www.puzzlescript.net
 again_interval .1
-verbose_logging
+
 ========
 OBJECTS
 ========

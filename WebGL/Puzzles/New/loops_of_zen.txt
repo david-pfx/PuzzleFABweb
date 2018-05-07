@@ -1,17 +1,21 @@
-title Loop of Zen
+title Loops of Zen
 author puzzlang
 homepage puzzlang.org
 
+color_palette amiga
 background_color darkblue
 text_color yellow
 
-color_palette mastersystem
+run_rules_on_level_start
 hover
 ========
 OBJECTS
 ========
 Background .
-grey
+darkgreen
+
+randomiser r
+red
 
 focus 
 lightgrey
@@ -25,10 +29,18 @@ lightgrey
 00000000
 
 lit
-yellow
+lightgreen
 
 edge *
-darkgrey
+darkgrey blue
+01010101
+10101010
+01010101
+10101010
+01010101
+10101010
+01010101
+10101010
 
 start S
 yellow
@@ -53,7 +65,7 @@ yellow
 ........
 
 tile1 1
-green
+red
 ...00...
 ...00...
 ...00...
@@ -64,7 +76,7 @@ green
 ........
 
 tile2 2
-green
+red
 ........
 ........
 ........
@@ -75,7 +87,7 @@ green
 ........
 
 tile3 3
-green
+red
 ...00...
 ...00...
 ...00...
@@ -86,7 +98,7 @@ green
 ........
 
 tile4 4
-green
+red
 ........
 ........
 ........
@@ -97,7 +109,7 @@ green
 ...00...
 
 tile5 5
-green
+red
 ...00...
 ...00...
 ...00...
@@ -108,7 +120,7 @@ green
 ...00...
 
 tile6 6
-green
+red
 ........
 ........
 ........
@@ -119,7 +131,7 @@ green
 ...00...
 
 tile7 7
-green
+red
 ...00...
 ...00...
 ...00...
@@ -130,7 +142,7 @@ green
 ...00...
 
 tile8 8
-green
+red
 ........
 ........
 ........
@@ -141,7 +153,7 @@ green
 ........
 
 tile9 9
-green
+red
 ...00...
 ...00...
 ...00...
@@ -152,7 +164,7 @@ green
 ........
 
 tileA A
-green
+red
 ........
 ........
 ........
@@ -163,7 +175,7 @@ green
 ........
 
 tileB B
-green
+red
 ...00...
 ...00...
 ...00...
@@ -174,7 +186,7 @@ green
 ........
 
 tileC C
-green
+red
 ........
 ........
 ........
@@ -185,7 +197,7 @@ green
 ...00...
 
 tileD D
-green
+red
 ...00...
 ...00...
 ...00...
@@ -196,7 +208,7 @@ green
 ...00...
 
 tileE E
-green
+red
 ........
 ........
 ........
@@ -207,7 +219,7 @@ green
 ...00...
 
 tileF F
-green
+red
 ...00...
 ...00...
 ...00...
@@ -227,6 +239,11 @@ tilehas4 = 4 or 5 or 6 or 7 or C or D or E or F
 tilehas8 = 8 or 9 or A or B or C or D or E or F
 
 clickable = 1 or 2 or 3 or 4 or 5 or 6 or 7 or 8 or 9 or A or B or C or D or E or F
+
+tileI = 5 or A
+tileT = 7 or E or D or B
+tileL = 3 or 6 or C or 9
+
 =======
 SOUNDS
 =======
@@ -235,18 +252,24 @@ SOUNDS
 COLLISIONLAYERS
 ================
 Background
-edge lit
+edge lit randomiser
 tile1 tile2 tile3 tile4 tile5 tile6 tile7 tile8 tile9 tileA tileB tileC tileD tileE tileF
 focus
-start end
+start end 
 
 ======
 RULES
 ======
 
+[ r ][ tileI ] -> [ r ][ random tileI ]
+[ r ][ tileL ] -> [ r ][ random tileL ]
+[ r ][ tileT ] -> [ r ][ random tileT ]
+[ r ] -> [ * ]
+
 [ focus clickable ] -> [ clickable ]
 [ hover clickable ] -> [ focus clickable ]
 
+( left click clockwise)
 [ fire1 1 ] -> [ focus 2 ]
 [ fire1 2 ] -> [ focus 4 ]
 [ fire1 4 ] -> [ focus 8 ]
@@ -260,11 +283,12 @@ RULES
 [ fire1 5 ] -> [ focus A ]
 [ fire1 A ] -> [ focus 5 ]
 
-[ fire1 7 ] -> [ focus B ]
-[ fire1 B ] -> [ focus D ]
-[ fire1 D ] -> [ focus E ]
-[ fire1 E ] -> [ focus 7 ]
+[ fire1 B ] -> [ focus 7 ]
+[ fire1 D ] -> [ focus B ]
+[ fire1 E ] -> [ focus D ]
+[ fire1 7 ] -> [ focus E ]
 
+( right click anticlockwise)
 [ fire2 2 ] -> [ focus 1 ]
 [ fire2 4 ] -> [ focus 2 ]
 [ fire2 8 ] -> [ focus 4 ]
@@ -278,20 +302,21 @@ RULES
 [ fire2 A ] -> [ focus 5 ]
 [ fire2 5 ] -> [ focus A ]
 
-[ fire2 B ] -> [ focus 7 ]
-[ fire2 D ] -> [ focus B ]
-[ fire2 E ] -> [ focus D ]
-[ fire2 7 ] -> [ focus E ]
+[ fire2 7 ] -> [ focus B ]
+[ fire2 B ] -> [ focus D ]
+[ fire2 D ] -> [ focus E ]
+[ fire2 E ] -> [ focus 7 ]
 
+( what to light? )
 [ lit ] -> [ ]
 up    [ 1 | tilehas4 ] -> [ lit 1 | tilehas4 ]
 right [ 2 | tilehas8 ] -> [ lit 2 | tilehas8 ]
 down  [ 4 | tilehas1 ] -> [ lit 4 | tilehas1 ]
 left  [ 8 | tilehas2 ] -> [ lit 8 | tilehas2 ]
-( bar )
+( I )
 up    [ tilehas1 | 5 | tilehas4 ] -> [ tilehas1 | lit 5 | tilehas4 ]
 right [ tilehas2 | A | tilehas8 ] -> [ tilehas2 | lit A | tilehas8 ]
-( angle )
+( L )
 up    [ 3 | tilehas4 ] -> [ lit 3 | tilehas4 ]
 right [ 6 | tilehas8 ] -> [ lit 6 | tilehas8 ]
 down  [ C | tilehas1 ] -> [ lit C | tilehas1 ]
@@ -309,7 +334,7 @@ right [ lit 7 | no tilehas8 ] -> [ 7 | no tilehas8 ]
 down  [ lit E | no tilehas1 ] -> [ E | no tilehas1 ]
 left  [ lit D | no tilehas2 ] -> [ D | no tilehas2 ]
 up    [ lit B | no tilehas4 ] -> [ B | no tilehas4 ]
-( cross )
+( X )
 up    [ tilehas1 | F | tilehas4 ] -> [ tilehas1 | lit F | tilehas4 ]
 right [ lit F | no tilehas8 ] -> [ F | no tilehas8 ]
 right [ no tilehas2 | lit F ] -> [ no tilehas2 | F ]
@@ -318,11 +343,31 @@ right [ no tilehas2 | lit F ] -> [ no tilehas2 | F ]
 WINCONDITIONS
 ==============
 
+all clickable on lit
+
 =======
 LEVELS
 =======
 
-**********
+r***
+*11*
+*33*
+****
+
+r****
+*353*
+*735*
+*133*
+*****
+
+r*****
+*41EC*
+*7879*
+*7C34*
+*83A8*
+******
+
+r*********
 *42C468.4*
 *5.7B9.2D*
 *3C5.44.5*
@@ -330,13 +375,4 @@ LEVELS
 *16BE96AD*
 *.52969.5*
 *29..3829*
-**********
-
-**********
-*12345678*
-*9ABSCDEF*
-*12345678*
-*S9ABCDEF*
-*12345678*
-*9ABXCDEF*
 **********

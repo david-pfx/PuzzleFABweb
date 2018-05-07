@@ -4,7 +4,7 @@ homepage www.farbs.org
 noundo
 noaction
 key_repeat_interval 0.1
-verbose_logging
+
 ========
 OBJECTS
 ========
