@@ -9,12 +9,12 @@ This in turn can be used to create players for almost any platform: Windows desk
 
 This is the Web Player, for anyone to use. Just click the links below.
 
-[Yet Another Sokoban](https://david-pfx.github.io/PuzzlangWeb/WebGL) shows high res objects.
+[2048](https://david-pfx.github.io/PuzzlangWeb/WebGL) shows text objects and other new features.
 
-[2048](https://david-pfx.github.io/PuzzlangWeb/WebGL?p=Puzzles/New/2048.txt) shows text objects.
+[Yet Another Sokoban](https://david-pfx.github.io/PuzzlangWeb/WebGL/?p=Puzzles/yasban.txt) shows high res objects.
 
-[Loops of Zen](https://david-pfx.github.io/PuzzlangWeb/WebGL?p=Puzzles/New/loops_of_zen.txt) shows high res and mouse.
+[Loops of Zen](https://david-pfx.github.io/PuzzlangWeb/WebGL?p=Extras/New/loops_of_zen.txt) shows high res and mouse.
 
-[Bridges](https://david-pfx.github.io/PuzzlangWeb/WebGL?p=Puzzles/New/bridges.txt) shows mouse, text and arithmetic.
+[Bridges](https://david-pfx.github.io/PuzzlangWeb/WebGL?p=Extras/New/bridges.txt) shows mouse, text and arithmetic.
 
-[Colour chart](https://david-pfx.github.io/PuzzlangWeb/WebGL?p=Puzzles/New/colour_chart.txt) is not really a game, more like a demo, with text.
+[Colour chart](https://david-pfx.github.io/PuzzlangWeb/WebGL?p=Extras/New/colour_chart.txt) is not really a game, more like a demo, with text.
