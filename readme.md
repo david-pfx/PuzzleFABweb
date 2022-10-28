@@ -14,11 +14,11 @@ The default game is [2048](https://david-pfx.github.io/PuzzleFABweb/WebGL), show
 
 Press Escape and the Pause screen will allow you to select other games, or try these links.
 
-[Yet Another Sokoban](https://david-pfx.github.io/PuzzlangWeb/WebGL/?p=Puzzles/New/yasban.txt) shows high res objects.
+[Yet Another Sokoban](https://david-pfx.github.io/PuzzleFABweb/WebGL/?p=Puzzles/New/yasban.txt) shows high res objects.
 
-[Loops of Zen](https://david-pfx.github.io/PuzzlangWeb/WebGL?p=Puzzles/New/loops_of_zen.txt) shows high res and mouse.
+[Loops of Zen](https://david-pfx.github.io/PuzzleFABweb/WebGL?p=Puzzles/New/loops_of_zen.txt) shows high res and mouse.
 
-[Black box](https://david-pfx.github.io/PuzzlangWeb/WebGL?p=Puzzles/New/block_box.txt) shows rule expansion with relative directions.
+[Black box](https://david-pfx.github.io/PuzzleFABweb/WebGL?p=Puzzles/New/block_box.txt) shows rule expansion with relative directions.
 
-[Bridges](https://david-pfx.github.io/PuzzlangWeb/WebGL?p=Puzzles/New/bridges.txt) shows mouse, text and arithmetic.
+[Bridges](https://david-pfx.github.io/PuzzleFABweb/WebGL?p=Puzzles/New/bridges.txt) shows mouse, text and arithmetic.
 
