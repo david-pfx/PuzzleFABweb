@@ -1,4 +1,4 @@
-title Bridges
+title Bridges 
 author polyomino games
 homepage polyomino.org
 
