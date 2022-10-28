@@ -1,0 +1,773 @@
+title MNSWPR.EXE
+author Benjamin Davis
+homepage bnhw.co.uk
+
+background_color #008080
+key_repeat_interval 0.25
+(norestart
+noundo)
+realtime_interval 1
+run_rules_on_level_start
+
+========
+OBJECTS
+========
+
+M1
+#1D17F4
+.....
+..0..
+..0..
+..0..
+.....
+
+M2
+#007F23
+.....
+.00..
+..0..
+..00.
+.....
+
+M3
+#FE0404
+.....
+.000.
+..00.
+.000.
+.....
+
+M4
+#0A067B
+.....
+.0.0.
+.000.
+...0.
+.....
+
+M5
+#840008
+.....
+..00.
+..0..
+.00..
+.....
+
+M6
+#008080
+.....
+.0...
+.000.
+.000.
+.....
+
+M7
+#000000
+.....
+.000.
+...0.
+...0.
+.....
+
+M8
+#808080
+.....
+..00.
+.000.
+.000.
+.....
+
+1
+#FE0404 Black
+11101
+11101
+11101
+11101
+11101
+
+2
+#FE0404 Black
+00001
+11101
+00001
+01111
+00001
+
+3
+#FE0404 Black
+00001
+11101
+10001
+11101
+00001
+
+4
+#FE0404 Black
+01101
+01101
+00001
+11101
+11101
+
+5
+#FE0404 Black
+00001
+01111
+00001
+11101
+00001
+
+6
+#FE0404 Black
+01111
+01111
+00001
+01101
+00001
+
+7
+#FE0404 Black
+00001
+11101
+11101
+11101
+11101
+
+8
+#FE0404 Black
+00001
+01101
+00001
+01101
+00001
+
+9
+#FE0404 Black
+00001
+01101
+00001
+11101
+11101
+
+0
+#FE0404 Black
+00001
+01101
+01101
+01101
+00001
+
+Happy
+Yellow Black #FFFFFF #808080
+20002
+01010
+10001
+01110
+20003
+
+(Sad
+Yellow Black #FFFFFF #808080
+20002
+01010
+00000
+01110
+20003)
+
+BorderT
+#FFFFFF
+00000
+.....
+.....
+.....
+.....
+
+BorderB
+#808080
+.....
+.....
+.....
+.....
+00000
+
+BorderL
+#FFFFFF
+0....
+0....
+0....
+0....
+0....
+
+BorderR
+#808080
+....0
+....0
+....0
+....0
+....0
+
+Background
+#C0C0C0
+
+Timer
+Black
+.....
+.....
+.....
+.....
+.....
+
+CursorTL
+Black White
+.....
+.....
+.....
+..00.
+..010
+
+CursorBL
+Black White
+..011
+..011
+..010
+..000
+.....
+
+CursorBR
+Black White
+0....
+10...
+00...
+.....
+.....
+
+Hidden
+#FFFFFF #808080 #C0C0C0
+00002
+02221
+02221
+02221
+21111
+(.....
+.....
+.....
+.....
+.....)
+(.....
+.....
+..2..
+.....
+.....)
+
+Flag
+#FF0016 Black
+.....
+.001.
+.001.
+...1.
+.....
+
+Mine
+Black
+.....
+.000.
+.000.
+.000.
+.....
+
+Spawn
+#FE0404
+
+=======
+LEGEND
+=======
+
+Border = BorderL or BorderR or BorderT or BorderB
+Count = Timer
+Cursor = CursorTL or CursorBL or CursorBR
+MineL = Flag
+MineR = Hidden
+MineMarker = MineL or MineR
+MineNumber = M1 or M2 or M3 or M4 or M5 or M6 or M7 or M8
+Number = 1 or 2 or 3 or 4 or 5 or 6 or 7 or 8 or 9 or 0
+Player = CursorTL
+Red = Spawn
+Shadow = Timer
+Smiley = Happy
+Won = 1
+Lost = 2
+
+. = Background
+o = Happy and Spawn and CursorTL
+m = Mine
+# = Spawn and Hidden
+
+- = BorderT and BorderB
+| = BorderL and BorderR
+┌ = BorderL and BorderT
+┐ = BorderR and BorderT
+└ = BorderL and BorderB
+┘ = BorderR and BorderB
+
+=======
+SOUNDS
+=======
+
+( Loss )
+sfx0 62623708
+( Win )
+sfx1 31491703
+( Flag )
+sfx2 12509507
+( Reveal )
+sfx3 13594107 
+
+================
+COLLISIONLAYERS
+================
+Background
+BorderL, Spawn, Timer
+BorderR, Number, Mine, MineNumber
+BorderT, Smiley, Hidden
+BorderB, Flag
+Cursor
+
+======
+RULES
+======
+
+
+( Cursor )
+
+	( Move cursor from smiley if haven't lost or won )
+    [ Spawn Smiley Player ] [ Hidden ] -> [ Spawn Smiley ] [ Hidden Player ]
+
+    ( Remove old cursor parts )
+    [ CursorBL ] -> [ ]
+    [ CursorBR ] -> [ ]
+
+    ( Add cursor parts at new position )
+    late down  [ CursorTL | ] -> [ CursorTL | CursorBL ]
+    late right [ CursorBL | ] -> [ CursorBL | CursorBR ]
+
+
+( Clean up borders )
+
+    right [ BorderR | BorderT BorderB ] -> [ | BorderT BorderB ]
+    right [ BorderT BorderB | BorderL ] -> [ BorderT BorderB | ]
+
+( Setup count )
+
+    [ Spawn Smiley ] [ Number no Timer ] -> [ Spawn Smiley ] [ Count Number ]
+
+
+( Timer )
+
+    ( Add to timer if player isn't moving [ i.e. realtime_interval is happening ], player isn't on smiley and spawn isn't on smiley )
+    right [ stationary Player no Smiley ] [ Smiley no Spawn | ... | Timer | no Timer ] -> [ Player ] [ Smiley | ... | action Timer | ]
+    
+    ( Increase timer )
+    startloop
+    	[ action Timer 9 | Timer 9 | Timer 9 ] -> [ Timer 9 | Timer 9 | Timer 9 ]
+        [ action Timer 0 ] -> [ Timer 1 ]
+        [ action Timer 1 ] -> [ Timer 2 ]
+        [ action Timer 2 ] -> [ Timer 3 ]
+        [ action Timer 3 ] -> [ Timer 4 ]
+        [ action Timer 4 ] -> [ Timer 5 ]
+        [ action Timer 5 ] -> [ Timer 6 ]
+        [ action Timer 6 ] -> [ Timer 7 ]
+        [ action Timer 7 ] -> [ Timer 8 ]
+        [ action Timer 8 ] -> [ Timer 9 ]
+        right [ Timer Number | action Timer 9 ] -> [ action Timer Number | Timer 0 ]
+    endloop
+
+
+( When spawning )
+
+    ( Clear hiddens )
+    [ Spawn Smiley ] [ action Player ] [ Hidden ] -> [ Spawn Smiley ] [ action Player ] [ ]
+    
+    ( Create mines from count )
+    startloop
+    
+        ( If there are numbers left on the counter, spawn mine and decrease )
+        random right [ Spawn Smiley ] [ action Player ] [ Count no 0 | ... | Smiley ] [ Count | No Count | ... | Smiley ] [ Spawn no Smiley no Mine no Player ] -> [ Spawn Smiley ] [ action Player ] [ Count | ... | Smiley ] [ action Count | | ... | Smiley ] [ Mine Spawn ]
+        
+        ( Cap at 000 )
+        [ Count 0 | Count 0 | Count 0 ] -> [ stationary Count 0 | stationary Count 0 | stationary Count 0 ]
+        
+        ( Decrease )
+        [ action Count 9 ] -> [ Count 8 ]
+        [ action Count 8 ] -> [ Count 7 ]
+        [ action Count 7 ] -> [ Count 6 ]
+        [ action Count 6 ] -> [ Count 5 ]
+        [ action Count 5 ] -> [ Count 4 ]
+        [ action Count 4 ] -> [ Count 3 ]
+        [ action Count 3 ] -> [ Count 2 ]
+        [ action Count 2 ] -> [ Count 1 ]
+        [ action Count 1 ] -> [ Count 0 ]
+        right [ Count | action Count 0 ] -> [ action Count | Count 9 ]
+        
+    endloop
+    
+    ( Create MineL and MineR markers )
+    left  [ Spawn Smiley ] [ action Player ] [ Mine | no Border no Number ] -> [ Spawn Smiley ] [ action Player ] [ Mine | MineL ]
+    right [ Spawn Smiley ] [ action Player ] [ Mine | no Border no Number ] -> [ Spawn Smiley ] [ action Player ] [ Mine | MineR ]
+    
+    ( Create numbers based on mines horizontally-adjacent )
+    horizontal [    Mine | no MineNumber no Number no Border no Mine |    Mine ] -> [ Mine | M2 | Mine ]
+    horizontal [ no Mine | no MineNumber no Number no Border no Mine |    Mine ] -> [      | M1 | Mine ]
+    
+    ( Create 0s )
+    [ Spawn Smiley ] [ action Player ] [ No Mine No Number no MineNumber No Smiley no Border ] -> [ Spawn Smiley ] [ action Player ] [ 0 ]
+    
+    ( Adjust for vertically adjacent )
+    vertical   [ Spawn Smiley ] [ action Player ] [    Mine | M2 |    Mine ] -> [ Spawn Smiley ] [ action Player ] [ Mine | M4 | Mine ]
+    vertical   [ Spawn Smiley ] [ action Player ] [ no Mine | M2 |    Mine ] -> [ Spawn Smiley ] [ action Player ] [      | M3 | Mine ]
+    vertical   [ Spawn Smiley ] [ action Player ] [    Mine | M1 |    Mine ] -> [ Spawn Smiley ] [ action Player ] [ Mine | M3 | Mine ]
+    vertical   [ Spawn Smiley ] [ action Player ] [ no Mine | M1 |    Mine ] -> [ Spawn Smiley ] [ action Player ] [      | M2 | Mine ]
+    vertical   [ Spawn Smiley ] [ action Player ] [    Mine |  0 |    Mine ] -> [ Spawn Smiley ] [ action Player ] [ Mine | M2 | Mine ]
+    vertical   [ Spawn Smiley ] [ action Player ] [ no Mine |  0 |    Mine ] -> [ Spawn Smiley ] [ action Player ] [      | M1 | Mine ]
+    
+    ( Adjust for diagonals )
+    up    [ M7 | MineL ] [ Spawn Smiley ] [ action Player ] -> [ M8 | MineL ] [ Spawn Smiley ] [ action Player ]
+    up    [ M6 | MineL ] [ Spawn Smiley ] [ action Player ] -> [ M7 | MineL ] [ Spawn Smiley ] [ action Player ]
+    up    [ M5 | MineL ] [ Spawn Smiley ] [ action Player ] -> [ M6 | MineL ] [ Spawn Smiley ] [ action Player ]
+    up    [ M4 | MineL ] [ Spawn Smiley ] [ action Player ] -> [ M5 | MineL ] [ Spawn Smiley ] [ action Player ]
+    up    [ M3 | MineL ] [ Spawn Smiley ] [ action Player ] -> [ M4 | MineL ] [ Spawn Smiley ] [ action Player ]
+    up    [ M2 | MineL ] [ Spawn Smiley ] [ action Player ] -> [ M3 | MineL ] [ Spawn Smiley ] [ action Player ]
+    up    [ M1 | MineL ] [ Spawn Smiley ] [ action Player ] -> [ M2 | MineL ] [ Spawn Smiley ] [ action Player ]
+    up    [  0 | MineL ] [ Spawn Smiley ] [ action Player ] -> [ M1 | MineL ] [ Spawn Smiley ] [ action Player ]
+    up    [ M7 | MineR ] [ Spawn Smiley ] [ action Player ] -> [ M8 | MineR ] [ Spawn Smiley ] [ action Player ]
+    up    [ M6 | MineR ] [ Spawn Smiley ] [ action Player ] -> [ M7 | MineR ] [ Spawn Smiley ] [ action Player ]
+    up    [ M5 | MineR ] [ Spawn Smiley ] [ action Player ] -> [ M6 | MineR ] [ Spawn Smiley ] [ action Player ]
+    up    [ M4 | MineR ] [ Spawn Smiley ] [ action Player ] -> [ M5 | MineR ] [ Spawn Smiley ] [ action Player ]
+    up    [ M3 | MineR ] [ Spawn Smiley ] [ action Player ] -> [ M4 | MineR ] [ Spawn Smiley ] [ action Player ]
+    up    [ M2 | MineR ] [ Spawn Smiley ] [ action Player ] -> [ M3 | MineR ] [ Spawn Smiley ] [ action Player ]
+    up    [ M1 | MineR ] [ Spawn Smiley ] [ action Player ] -> [ M2 | MineR ] [ Spawn Smiley ] [ action Player ]
+    up    [  0 | MineR ] [ Spawn Smiley ] [ action Player ] -> [ M1 | MineR ] [ Spawn Smiley ] [ action Player ]
+    down  [ M7 | MineL ] [ Spawn Smiley ] [ action Player ] -> [ M8 | MineL ] [ Spawn Smiley ] [ action Player ]
+    down  [ M6 | MineL ] [ Spawn Smiley ] [ action Player ] -> [ M7 | MineL ] [ Spawn Smiley ] [ action Player ]
+    down  [ M5 | MineL ] [ Spawn Smiley ] [ action Player ] -> [ M6 | MineL ] [ Spawn Smiley ] [ action Player ]
+    down  [ M4 | MineL ] [ Spawn Smiley ] [ action Player ] -> [ M5 | MineL ] [ Spawn Smiley ] [ action Player ]
+    down  [ M3 | MineL ] [ Spawn Smiley ] [ action Player ] -> [ M4 | MineL ] [ Spawn Smiley ] [ action Player ]
+    down  [ M2 | MineL ] [ Spawn Smiley ] [ action Player ] -> [ M3 | MineL ] [ Spawn Smiley ] [ action Player ]
+    down  [ M1 | MineL ] [ Spawn Smiley ] [ action Player ] -> [ M2 | MineL ] [ Spawn Smiley ] [ action Player ]
+    down  [  0 | MineL ] [ Spawn Smiley ] [ action Player ] -> [ M1 | MineL ] [ Spawn Smiley ] [ action Player ]
+    down  [ M7 | MineR ] [ Spawn Smiley ] [ action Player ] -> [ M8 | MineR ] [ Spawn Smiley ] [ action Player ]
+    down  [ M6 | MineR ] [ Spawn Smiley ] [ action Player ] -> [ M7 | MineR ] [ Spawn Smiley ] [ action Player ]
+    down  [ M5 | MineR ] [ Spawn Smiley ] [ action Player ] -> [ M6 | MineR ] [ Spawn Smiley ] [ action Player ]
+    down  [ M4 | MineR ] [ Spawn Smiley ] [ action Player ] -> [ M5 | MineR ] [ Spawn Smiley ] [ action Player ]
+    down  [ M3 | MineR ] [ Spawn Smiley ] [ action Player ] -> [ M4 | MineR ] [ Spawn Smiley ] [ action Player ]
+    down  [ M2 | MineR ] [ Spawn Smiley ] [ action Player ] -> [ M3 | MineR ] [ Spawn Smiley ] [ action Player ]
+    down  [ M1 | MineR ] [ Spawn Smiley ] [ action Player ] -> [ M2 | MineR ] [ Spawn Smiley ] [ action Player ]
+    down  [  0 | MineR ] [ Spawn Smiley ] [ action Player ] -> [ M1 | MineR ] [ Spawn Smiley ] [ action Player ]
+    
+    ( Remove mine markers )
+    [ Spawn Smiley ] [ action Player ] [ MineMarker ] -> [ Spawn Smiley ] [ action Player ] [ ]
+    
+    ( Remove zeros )
+    [ 0 no Timer no Count ] -> [ ]
+    
+    ( Create hiddens )
+    [ Spawn Smiley ] [ action Player ] [ Spawn no Smiley ] -> [ Spawn Smiley ] [ action Player ] [ Hidden ]
+    [ Spawn Smiley ] [ action Player ] [ Mine ] -> [ Spawn Smiley ] [ action Player ] [ Mine Hidden ]
+    [ Spawn Smiley ] [ action Player ] [ MineNumber no Count no Timer ] -> [ Spawn Smiley ] [ action Player ] [ MineNumber Hidden ]
+    
+    ( Remove smiley spawn )
+    [ Smiley Spawn ] [ action Player ] -> [ Smiley ] [ action Player ]
+
+
+( Player actions )
+
+    ( Stop Player from moving into borders )
+    [ > Player | Border ] -> cancel
+    
+    ( Stop Player from moving off smiley )
+    [ > Player Smiley ] -> cancel
+    
+    ( Cancel if nothing to unhide )
+    [ action Player no Hidden no Smiley no MineNumber ] -> cancel
+    
+    ( Continue )
+    [ action Player Smiley no Lost ] -> [ Player Smiley Won ] sfx2
+    
+    ( Restart )
+    [ action Player Smiley Lost ] -> restart
+    
+    ( Unhide mine player is on )
+    [ action Player Shadow Hidden Flag Mine ] -> [ Player Shadow action Mine ]
+    
+    ( Unhide empty space )
+    [ action Player Shadow Hidden Flag no Mine no MineNumber Background ] -> [ Player Shadow action Background ] sfx3
+    
+    ( Unhide mine number )
+    [ action Player Shadow Hidden Flag MineNumber ] -> [ Player MineNumber ] sfx3
+    
+    ( Reveal surrounding tiles when correct number flagged [ requires double-action ] )
+    [ action Player Shadow MineNumber ] -> [ action Player action MineNumber ]
+    
+    ( Unflag )
+    [ action Player no Shadow Hidden Flag ] -> [ Player Hidden no Flag ] sfx2
+
+    ( Flag )
+    [ action Player Hidden no Flag ] -> [ action Player Hidden Flag ] sfx2
+    
+    ( Move shadow )
+    [ Moving Player ] [ Shadow no Number ] -> [ Moving Player ] [ ]
+    [ Moving Player ] [ Smiley no Spawn ] -> [ Moving Player Shadow ] [ Smiley no Spawn ]
+
+
+( When revealing surrounding tiles )
+
+    ( Mark adjacent )
+    left  [ action MineNumber | Background ] -> [ action MineNumber | left  Background ]
+    right [ action MineNumber | Background ] -> [ action MineNumber | right Background ]
+    up    [ action MineNumber | Background ] -> [ action MineNumber | up    Background ]
+    down  [ action MineNumber | Background ] -> [ action MineNumber | down  Background ]
+    
+    ( Mark diagonal )
+    horizontal [ vertical Background | Background ] -> [ vertical Background | left Background ]
+
+    ( Reset mine count to 0 )
+    right [ Count Number | Count Number | Count Number | ... | Smiley no Spawn ] -> [ Count 0 | Count 0 | Count 0 | ... | Smiley no Spawn ]
+    
+    ( Count flags adjacent )
+    startloop
+    
+        random right [ Count | no Count | ... | Smiley no Spawn ] [ moving Background Flag ] -> [ action Count | no Count | ... | Smiley no Spawn ] [ Background Flag ]
+        
+        [ action Count 0 ] -> [ Count 1 ]
+        [ action Count 1 ] -> [ Count 2 ]
+        [ action Count 2 ] -> [ Count 3 ]
+        [ action Count 3 ] -> [ Count 4 ]
+        [ action Count 4 ] -> [ Count 5 ]
+        [ action Count 5 ] -> [ Count 6 ]
+        [ action Count 6 ] -> [ Count 7 ]
+        [ action Count 7 ] -> [ Count 8 ]
+        
+    endloop
+    
+    ( Unmark backgrounds if wrong number of flags )
+    [ Count 0 | Count 0 | Count no 1 | ... | Smiley ] [ action M1 ] [ moving Background ] -> [ Count 0 | Count 0 | Count | ... | Smiley ] [ action M1 ] [ stationary Background ]
+    [ Count 0 | Count 0 | Count no 2 | ... | Smiley ] [ action M2 ] [ moving Background ] -> [ Count 0 | Count 0 | Count | ... | Smiley ] [ action M2 ] [ stationary Background ]
+    [ Count 0 | Count 0 | Count no 3 | ... | Smiley ] [ action M3 ] [ moving Background ] -> [ Count 0 | Count 0 | Count | ... | Smiley ] [ action M3 ] [ stationary Background ]
+    [ Count 0 | Count 0 | Count no 4 | ... | Smiley ] [ action M4 ] [ moving Background ] -> [ Count 0 | Count 0 | Count | ... | Smiley ] [ action M4 ] [ stationary Background ]
+    [ Count 0 | Count 0 | Count no 5 | ... | Smiley ] [ action M5 ] [ moving Background ] -> [ Count 0 | Count 0 | Count | ... | Smiley ] [ action M5 ] [ stationary Background ]
+    [ Count 0 | Count 0 | Count no 6 | ... | Smiley ] [ action M6 ] [ moving Background ] -> [ Count 0 | Count 0 | Count | ... | Smiley ] [ action M6 ] [ stationary Background ]
+    [ Count 0 | Count 0 | Count no 7 | ... | Smiley ] [ action M7 ] [ moving Background ] -> [ Count 0 | Count 0 | Count | ... | Smiley ] [ action M7 ] [ stationary Background ]
+    [ Count 0 | Count 0 | Count no 8 | ... | Smiley ] [ action M8 ] [ moving Background ] -> [ Count 0 | Count 0 | Count | ... | Smiley ] [ action M8 ] [ stationary Background ]
+    
+    ( Unhide marked Backgrounds with Mine )
+    [ moving Background Hidden Mine ] -> [ Background action Mine ]
+    
+    ( Unhide marked Backgrounds with empty space )
+    [ moving Background Hidden no Mine no MineNumber ] -> [ action Background ] sfx3
+    
+    ( Unhide marked Backgrounds with number )
+    [ moving Background Hidden MineNumber ] -> [ Background MineNumber ] sfx3
+    
+    ( Unmark remaining Backgrounds [ i.e. those that were already revealed ] )
+    [ orthogonal Background ] -> [ Background ]
+    
+    [ action MineNumber ] -> [ MineNumber ]
+
+
+( When uncovering a mine )
+
+    ( Highlight triggered mine )
+    [ action Mine ] -> [ action Mine Red ]
+
+    ( Unhide all mines )
+    [ action Mine ] [ Mine ] -> [ action Mine ] [ action Mine no Hidden no Flag ]
+    
+    ( Set to sad face )
+    ([ action Mine ] [ Happy ] -> [ action Mine ] [ Sad ])
+    
+    ( Move player )
+    [ action Mine ] [ Player no Smiley ] [ Smiley ] -> [ action Mine ] [ ] [ Player Smiley Lost ] sfx0 message Kaboom! Press X to retry.
+    
+    ( Remove flags )
+    [ action Mine ] [ Flag ] -> [ action Mine ] [ ]
+    
+    ( Clear action )
+    [ action Mine ] -> [ stationary Mine ]
+    
+    
+( When uncovering an empty space )
+
+    startloop
+    
+        ( Mark tiles adjacent to action Background )
+        left  [ action Background | horizontal Background no Border ] -> [ action Background | left  Background ]
+        right [ action Background | horizontal Background no Border ] -> [ action Background | right Background ]
+        up    [ action Background | horizontal Background no Border ] -> [ action Background | up    Background ]
+        down  [ action Background | horizontal Background no Border ] -> [ action Background | down  Background ]
+        left  [ action Background | stationary Background no Border ] -> [ action Background | left  Background ]
+        right [ action Background | stationary Background no Border ] -> [ action Background | right Background ]
+        up    [ action Background | stationary Background no Border ] -> [ action Background | up    Background ]
+        down  [ action Background | stationary Background no Border ] -> [ action Background | down  Background ]
+        
+        ( Mark tiles diagonal to action Background )
+        horizontal [ vertical Background | stationary Background ] -> [ vertical Background | left Background ]
+        
+        ( Reveal tiles, marking empty spaces )
+        [ orthogonal Background no MineNumber ] -> [ action Background no Hidden ]
+        [ orthogonal Background Hidden MineNumber ] -> [ orthogonal Background MineNumber ]
+        
+    endloop
+    
+    ( Clear flags on revealed tiles )
+    [ Background Flag No Hidden ] -> [ Background ]
+    
+    ( Clean up Background)
+    [ moving Background ] -> [ Background ]
+
+
+( Check for win condition [all empty spaces are revealed] )
+
+    ( Set action on all tiles with Mine and Hidden )
+    [ Mine Hidden ] -> [ action Mine action Hidden ]
+    
+    ( If any hiddens are alone then unset all )
+    [ stationary Hidden ] [ action Hidden ] -> [ Hidden ] [ Hidden ]
+    [ stationary Hidden ] [ action Mine ] -> [ Hidden ] [ Mine ]
+    
+    ( If some are still set, we've won! Move the player )
+    [ action Mine ] [ Player no Happy ] [ Happy ] -> [ action Mine ] [ ] [ Player Happy ] sfx1 message Congratulations! Press X for next level.
+    
+
+( Mine counter )
+
+    ( Reset mine count to 0 )
+    right [ Count Number | Count Number | Count Number | ... | Smiley no Spawn ] -> [ Count 0 | Count 0 | Count 0 | ... | Smiley no Spawn ]
+    
+    ( Clear action )
+    [ action Flag ] -> [ Flag ]
+    [ action Mine ] -> [ Mine ]
+    
+    ( Count mines )
+    startloop
+    
+        random right [ Count | no Count | ... | Smiley no Spawn ] [ stationary Mine ] -> [ action Count | no Count | ... | Smiley no Spawn ] [ action Mine ]
+        
+        [ action Count 0 ] -> [ Count 1 ]
+        [ action Count 1 ] -> [ Count 2 ]
+        [ action Count 2 ] -> [ Count 3 ]
+        [ action Count 3 ] -> [ Count 4 ]
+        [ action Count 4 ] -> [ Count 5 ]
+        [ action Count 5 ] -> [ Count 6 ]
+        [ action Count 6 ] -> [ Count 7 ]
+        [ action Count 7 ] -> [ Count 8 ]
+        [ action Count 8 ] -> [ Count 9 ]
+        right [ Count | action Count 9 ] -> [ action Count | Count 0 ]
+        
+    endloop
+    
+    ( Subtract flags from mine count )
+    startloop
+    
+        random right [ Count | no Count | ... | Smiley no Spawn ] [ stationary Flag ] -> [ action Count | no Count | ... | Smiley no Spawn ] [ action Flag ]
+        
+        [ Count 0 | Count 0 | Count 0 ] -> [ stationary Count 0 | stationary Count 0 | stationary Count 0 ]
+        
+        [ action Count 9 ] -> [ Count 8 ]
+        [ action Count 8 ] -> [ Count 7 ]
+        [ action Count 7 ] -> [ Count 6 ]
+        [ action Count 6 ] -> [ Count 5 ]
+        [ action Count 5 ] -> [ Count 4 ]
+        [ action Count 4 ] -> [ Count 3 ]
+        [ action Count 3 ] -> [ Count 2 ]
+        [ action Count 2 ] -> [ Count 1 ]
+        [ action Count 1 ] -> [ Count 0 ]
+        right [ Count | action Count 0 ] -> [ action Count | Count 9 ]
+        
+    endloop
+    
+
+==============
+WINCONDITIONS
+==============
+
+Some Won on Smiley
+
+=======
+LEVELS
+=======
+
+message Press X to flag and X again to reveal.
+
+message Moving away and back onto a flagged tile will let you unflag the tile.
+
+message Beginner
+
+( 9x9 with 10 mines)
+┌---------┐
+|010.o.000|
+|---------|
+|#########|
+|#########|
+|#########|
+|#########|
+|#########|
+|#########|
+|#########|
+|#########|
+|#########|
+└---------┘
+
+
+message Intermediate
+
+( 16x16 with 40 mines )
+┌----------------┐
+|040.....o....000|
+|----------------|
+|################|
+|################|
+|################|
+|################|
+|################|
+|################|
+|################|
+|################|
+|################|
+|################|
+|################|
+|################|
+|################|
+|################|
+|################|
+|################|
+└----------------┘
+
+
+message Expert
+
+( 30x16 with 99 mines )
+┌------------------------------┐
+|099............o...........000|
+|------------------------------|
+|##############################|
+|##############################|
+|##############################|
+|##############################|
+|##############################|
+|##############################|
+|##############################|
+|##############################|
+|##############################|
+|##############################|
+|##############################|
+|##############################|
+|##############################|
+|##############################|
+|##############################|
+|##############################|
+└------------------------------┘
+
+
+message Mines: sweeped!
+
+message There are no more levels here, but...
+
+message ...if you press the "hack" button below, you can create your own!
