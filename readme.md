@@ -10,13 +10,15 @@ More about PuzzleScript on the [blog](http://www.polyomino.com/puzzlescript) or 
 PuzzleFAB has players for Windows desktop, Linux, WebGL, Android, iOS and more. 
 This is the PuzzleFAB Web Player. Just click the link and enjoy!.
 
-The default game is [2048](https://david-pfx.github.io/PuzzleFABweb/WebGL), showing mouse clicks, text and high res objects.
+The default game is [333](https://david-pfx.github.io/PuzzleFABweb/WebGL), showing mouse clicks, text and high res objects.
 
 Press Escape and the Pause screen will allow you to select other games, or try these links.
 
-[Yet Another Sokoban](https://david-pfx.github.io/PuzzleFABweb/WebGL/?p=Puzzles/New/yasban.txt) shows high res objects.
+[2048](https://david-pfx.github.io/PuzzleFABweb/WebGL/New/2048.txt), showing mouse clicks, text and high res objects.
 
-[Loops of Zen](https://david-pfx.github.io/PuzzleFABweb/WebGL?p=Puzzles/New/loops_of_zen.txt) shows high res and mouse.
+[Yet Another Sokoban](https://david-pfx.github.io/PuzzleFABweb/WebGL/?p=Puzzles/New/yasban.txt) shows high res objects and move animations.
+
+[Loops of Zen](https://david-pfx.github.io/PuzzleFABweb/WebGL?p=Puzzles/New/loops_of_zen.txt) shows high res and mouse, with animated rotation.
 
 [Black box](https://david-pfx.github.io/PuzzleFABweb/WebGL?p=Puzzles/New/black_box.txt) shows rule expansion with relative directions.
 
