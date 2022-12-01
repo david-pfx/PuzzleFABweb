@@ -18,9 +18,9 @@ Press Escape and the Pause screen will allow you to select other games, or try t
 
 [Yet Another Sokoban](https://david-pfx.github.io/PuzzleFABweb/WebGL/?p=Puzzles/New/yasban.txt) shows high res objects and move animations.
 
-[Loops of Zen](https://david-pfx.github.io/PuzzleFABweb/WebGL?p=Puzzles/New/loops_of_zen.txt) shows high res and mouse, with animated rotation.
+[Net Game](https://david-pfx.github.io/PuzzleFABweb/WebGL?p=Puzzles/New/netgame.txt) shows high res and mouse, with animated rotation.
 
 [Black box](https://david-pfx.github.io/PuzzleFABweb/WebGL?p=Puzzles/New/black_box.txt) shows rule expansion with relative directions.
 
-[Bridges](https://david-pfx.github.io/PuzzleFABweb/WebGL?p=Puzzles/New/bridges.txt) shows mouse, text and arithmetic.
+[Bridges](https://david-pfx.github.io/PuzzleFABweb/WebGL?p=Puzzles/New/bridges.txt) shows mouse and text.
 
