@@ -8,8 +8,8 @@ endline ;
 background_color lightbrown
 text_color darkblue
 run_rules_on_level_start
-hover
-noarrows
+enable_hover
+enable_click
 
 ========
 OBJECTS
@@ -125,7 +125,7 @@ endloop
 [ focus ] -> [ ]
 [ hover clickable ] -> [ focus clickable ]
 
-[ fire1 digit | 0 ] -> [ 0 | digit ]
+[ click1 digit | 0 ] -> [ 0 | digit ]
 
 [ grid ] -> [ ]
 [ digit ] -> [ digit grid ]

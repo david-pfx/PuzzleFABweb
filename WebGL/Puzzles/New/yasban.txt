@@ -1,22 +1,23 @@
-title Yet Another Sokoban
-author Polygame Games
+title Yet Another High-Res Animated Sokoban
+author Polyomino Games
 homepage www.puzzlang.org
 
-(color_palette amiga)
+comment //
+endline ;
+
+//color_palette amiga
 background_color Blue
+animate_interval 0.3
 
 ========
 OBJECTS
 ========
 
-Background .
-LightGrey
+Background .; LightGrey
 
-Void -
-Blue
+Void -; Blue
 
-Player P
-Yellow Green Red Black
+Player P; Yellow Green Red Black
 ...........
 ....222....
 ...03030...
@@ -30,8 +31,7 @@ Yellow Green Red Black
 ...........
 
 
-Target T
-DarkRed
+Target T; DarkRed
 0...........0
 .0.........0.
 ..0.......0..
@@ -46,8 +46,7 @@ DarkRed
 .0.........0.
 0...........0
 
-Wall W
-Orange DarkBrown
+Wall W; Orange DarkBrown
 001000000
 001000000
 111111111
@@ -58,8 +57,7 @@ Orange DarkBrown
 000000010
 111111111
 
-Crate C
-Yellow DarkBrown
+Crate C; Yellow DarkBrown
 ...........
 ..0000000..
 .001111100.
@@ -72,8 +70,7 @@ Yellow DarkBrown
 ..0000000..
 ...........
 
-Hello H
-blue yellow
+Hello H; blue yellow
 text Hello world!
 
 =======
@@ -86,6 +83,10 @@ LEGEND
 =======
 SOUNDS
 =======
+
+player move afxT
+player cantmove afxB  48306102
+crate move 76861108 afxT
 
 ================
 COLLISIONLAYERS

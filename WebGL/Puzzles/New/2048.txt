@@ -9,30 +9,15 @@ endline ;
 // Text objects using TEXT 
 // Icons of any size with definable scaling factor
 // End of line comments using //
-// Line breaks using \\
+// Line breaks using ;
 
 background_color blue
 text_color yellow
 run_rules_on_level_start
-noaction
+
 ========
 OBJECTS
 ========
-
-Background .; green;
-edge *      ; green;
-spot @      ; green;
-
-over ; transparent;
-live ; transparent;
-orig ; transparent;
-
-empty; lightgrey  ;
-bg1  ; lightbrown ;
-bg2  ; yellow     ;
-bg3  ; orange     ;
-bg4  ; red        ;
-score; transparent;
 
 1; white; resize 0.9; text 2
 2; white; resize 0.8; text 4
@@ -70,6 +55,22 @@ grid; grey
 0..............0
 0000000000000000
 
+Background .; green;
+edge *      ; green;
+spot @      ; green;
+
+over ; transparent;     // game over
+idle ; transparent;     // did not make any move
+live ; transparent;
+orig ; transparent;
+
+empty; lightgrey  ;
+bg1  ; lightbrown ;
+bg2  ; yellow     ;
+bg3  ; orange     ;
+bg4  ; red        ;
+score; transparent;
+
 =======
 LEGEND
 =======
@@ -87,10 +88,12 @@ COLLISIONLAYERS
 ================
 Background
 edge border spot 
-live bg over
+live bg 
+over
 orig
 empty number
 grid score
+idle
 
 ======
 SOUNDS
@@ -100,10 +103,10 @@ SOUNDS
 RULES
 ======
 
-// note: rules run at beginning, so >spot is used to filter 
+[ over ] -> cancel
+[ b ] -> cancel
 
-// check if game over
-[ over ] -> cancel 
+// note: rules run at beginning, so >spot is used to filter 
 
 // mark all tiles as live (combinable) and original position
 [ > number ] -> [ > number live orig ]
@@ -135,20 +138,18 @@ endloop
 [ > number ] -> [ number ]
 [ live ] -> [ ]
 
-// cancel if all mark on number
-[ > spot ] -> [ > spot live]
-[ live ] [ number no orig ] -> [ ] [ number ]
-[ live ] [ orig no number ] -> [ ] [ ]
-[ live ] -> cancel
-[ orig ] -> [ ]
+// set idle if all mark on number, no move was made
+[ > spot ] -> [ > spot idle]
+[ idle ] [ number no orig ] -> [ ] [ number ]
+[ idle ] [ orig no number ] -> [ ] [ ]
 
 // random new tile 10:1 2 vs 4 (two on startup)
 random [ empty ] -> [ live ]
 random [ stationary spot ] [ empty ] -> [ spot ] [ live ]
-[ live ] -> [ random 1 1 1 1 1 1 1 1 1 2 ]
+[ live ] -> [ random 1 random 1 random 1 random 1 random 1 random 1 random 1 random 1 random 1 random 2 ]
 
 // check for can move
-[ spot ] -> [ spot live]
+[ > spot ] -> [ > spot live]
 [ live ] [ empty ] -> [ ] [ empty ]
 [ live ] [ 1 | 1 ] -> [ ] [ 1 | 1 ]
 [ live ] [ 2 | 2 ] -> [ ] [ 2 | 2 ]
@@ -160,7 +161,8 @@ random [ stationary spot ] [ empty ] -> [ spot ] [ live ]
 [ live ] [ 8 | 8 ] -> [ ] [ 8 | 8 ]
 [ live ] [ 9 | 9 ] -> [ ] [ 9 | 9 ]
 [ live ] [ a | a ] -> [ ] [ a | a ]
-[ live ] -> [ over ] message Game Over!
+[ > spot live ] -> [ spot over ] status Game Over! R to play again.
+[ idle ] -> cancel
 
 // now add backgrounds
 [ bg ] -> [ ]
@@ -176,18 +178,21 @@ random [ stationary spot ] [ empty ] -> [ spot ] [ live ]
 [ a ] -> [ grid bg4 a ]
 [ b ] -> [ grid bg4 b ]
 
+[ b ] -> status You win! R to play again.
+
 ==============
 WINCONDITIONS
 ==============
 
-some b
+//some b
  
 =======
 LEVELS
 =======
 
-message Regular 4x4 puzzle
+message The aim is to reach 2048. Good luck!
 
+level Regular 4x4 puzzle
 #@***S*#
 #*xxxx*#
 #*xxxx*#
@@ -195,8 +200,7 @@ message Regular 4x4 puzzle
 #*xxxx*#
 #******#
 
-message Test 4x4 puzzle
-
+level Test 4x4 puzzle
 #@***S*#
 #*11xx*#
 #*xxxx*#
@@ -204,8 +208,7 @@ message Test 4x4 puzzle
 #*xxxx*#
 #******#
 
-message Test 4x4 puzzle
-
+level Test puzzle no move
 #@***S*#
 #*x3x3*#
 #*2424*#
@@ -213,21 +216,11 @@ message Test 4x4 puzzle
 #*2424*#
 #******#
 
-message Small 3x3 puzzle
-
-#@**S*#
-#*xxx*#
-#*xxx*#
-#*xxx*#
-#*****#
-
-message Large 5x5 puzzle
-
-#@******#
-#*xxxxx*#
-#*xxxxx*#
-#*xxxxx*#
-#*xxxxx*#
-#*xxxxx*#
-#*******#
+level Test puzzle one move to win
+#@***S*#
+#*99aa*#
+#*5678*#
+#*3344*#
+#*1122*#
+#******#
 

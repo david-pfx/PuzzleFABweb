@@ -76,12 +76,11 @@ NR ; blue; scale 0.7; text R
 NH ; blue; scale 0.7; text H
 
 // testing
-//target
-//transparent grey
+target; transparent grey
 //0000110000
 //0000110000
 
-target; transparent
+//target; transparent
 Background .; lightgreen
 edge *; orange
 cover C; blue
@@ -155,7 +154,6 @@ startloop
   random [ cover target ][ grid no target ] -> [ cover nonum ][ grid target ]
 endloop
 
-[ ] -> status
 [ wrong ] -> [ ]
 [ temp ] -> [ ]
 //FAB: settable flag with IF
@@ -163,25 +161,25 @@ endloop
 // manage focus
 
 [ iswin ][ hover clickable ] -> cancel
-[ iswin ][ fire1 clickable ] -> restart
+[ iswin ][ click1 clickable ] -> restart
 
 //[ focus ] -> [ ]
 //[ hover clickable ] -> [ focus clickable ]
 
 // place or remove a solution ball on the grid
-[ fire1 noball ][ ball cover ] -> [ ball ][ noball cover ]
-[ fire1 ball ][ noball cover ] -> [ noball ][ ball cover ]
+[ click1 noball ][ ball cover ] -> [ ball ][ noball cover ]
+[ click1 ball ][ noball cover ] -> [ noball ][ ball cover ]
 
 // place or remove a marker on the grid
-[ fire2 grid no mark ] -> [ grid mark ]
-[ fire2 grid mark ] -> [ grid no mark ]
+[ click2 grid no mark ] -> [ grid mark ]
+[ click2 grid mark ] -> [ grid no mark ]
 
 // light up if no balls left to place
 [ done ] -> [ done lit ]
 [ done lit ][ ball cover ] -> [ done ][ ball cover ]
 
 // check for win
-[ fire1 done lit ] -> [ done lit temp ]
+[ click1 done lit ] -> [ done lit temp ]
 [ lit temp ][ ball no target ] -> [ lit temp ][ ball wrong ]
 [ lit temp ][ wrong ] -> [ lit temp wrong ][ wrong ]
 [ lit temp no wrong ] -> [ lit temp iswin ]
@@ -194,7 +192,7 @@ endloop
 // so [ PP:> ] becomes [ PP:right ] etc x4
 
 // accept a trial ray click on edge
-[ done no lit ][ fire1 nonum ] -> [ done ][ PS ]
+[ done no lit ][ click1 nonum ] -> [ done ][ PS ]
 [ ps | target ] -> [ nh | target ]      // target ahead blocked immediately
 [ ps | x ] -> [ ps | x PP:> ]       // start path
 
@@ -248,6 +246,9 @@ WINCONDITIONS
 =======
 LEVELS
 =======
+
+message Click on the edge to send rays bouncing off targets
+
 
 level 10x10, 5 balls
 SDEEEEEEEEEE*B
