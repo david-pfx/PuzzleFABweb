@@ -14,7 +14,7 @@ The default game is [333](https://david-pfx.github.io/PuzzleFABweb/WebGL), showi
 
 Press Escape and the Pause screen will allow you to select other games, or try these links.
 
-[2048](https://david-pfx.github.io/PuzzleFABweb/WebGL/New/2048.txt), showing mouse clicks, text and high res objects.
+[2048](https://david-pfx.github.io/PuzzleFABweb/WebGL/?p=Puzzles/New/2048.txt), showing mouse clicks, text and high res objects.
 
 [Yet Another Sokoban](https://david-pfx.github.io/PuzzleFABweb/WebGL/?p=Puzzles/New/yasban.txt) shows high res objects and move animations.
 
