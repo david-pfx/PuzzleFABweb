@@ -7,8 +7,7 @@ endline ;
 
 background_color darkblue
 text_color yellow
-enable_hover
-enable_click
+hover
 
 ========
 OBJECTS

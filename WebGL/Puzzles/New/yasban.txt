@@ -13,10 +13,6 @@ animate_interval 0.3
 OBJECTS
 ========
 
-Background .; LightGrey
-
-Void -; Blue
-
 Player P; Yellow Green Red Black
 ...........
 ....222....
@@ -70,6 +66,8 @@ Crate C; Yellow DarkBrown
 ..0000000..
 ...........
 
+Background .; LightGrey
+Void -; Blue
 Hello H; blue yellow
 text Hello world!
 

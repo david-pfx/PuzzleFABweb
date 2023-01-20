@@ -69,10 +69,13 @@ mover M;transparent     // player used to record input direction for next
 bg1;blue;
 bg2;red;
 bg3;white;
-T1;lightblue;           // temporary marker objects
-T2;grey;
-T3;black;
+
 over;transparent        // marker for game over (with d is won)
+
+// temporary marker objects
+T1;pink;
+T2;pink;
+T3;pink;
 
 =======
 LEGEND

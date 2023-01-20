@@ -12,9 +12,9 @@ background_color lightblue
 text_color darkbrown
 
 run_rules_on_level_start
-enable_click
-enable_hover
 animate_interval 0.2
+clicks
+hover
 
 ========
 OBJECTS
@@ -95,23 +95,24 @@ red
 Background .;green
 init;red
 mix;blue
+test;yellow
 lit;lightbrown
 done;transparent
 start s;transparent
 empty e;transparent
-temp;transparent
-q1;transparent
-q2;transparent
-q3;transparent
-q4;transparent
-tileX;transparent  // extra tile for shifts
-r0;transparent
-r90;transparent
-r180;transparent
-r270;transparent
-c1;transparent
-c2;transparent
-c3;transparent
+temp;pink
+q1;pink
+q2;pink
+q3;pink
+q4;pink
+tileX;pink  // extra tile for shifts
+r0;pink
+r90;pink
+r180;pink
+r270;pink
+c1;pink
+c2;pink
+c3;pink
 
 =======
 LEGEND
@@ -119,9 +120,11 @@ LEGEND
 
 i = init and edge
 m = mix and edge
+t = test and background
 tileNESW = tileN or tileE or tileS or tileW
 active = start or tileNESW
-clickable = tileNESW
+//clickable = tileNESW
+player = tileNESW
 // tile rotation
 tileRL0 = tileN or tileE or tileS or tileW or tileX
 tileRL1 = tileX or tileN or tileE or tileS or tileW
@@ -130,16 +133,16 @@ tileRR1 = tileX or tileN or tileW or tileS or tileE
 tileRX0 = tileN or tileS or tileX or tileW or tileE or tileX
 tileRX1 = tileX or tileN or tileS or tileX or tileW or tileE
 queues = temp or q1 or q2 or q3 or q4
-rotation = r0 or r90 or r180 or r270
-rr = r90 or r180 or r270
-tempobj = r0 or init or mix
+rot4 = r0 or r90 or r180 or r270
+rot3 = r90 or r180 or r270
+tempobj = r0 or c1 or c2 or c3
 
 =======
 SOUNDS
 =======
 
-clickable click1 32169907 afxRR
-clickable click2 32169907 afxRL
+player click1 32169907 afxRR
+player click2 32169907 afxRL
 sfx0 32169907
 sfx1 16334503
 
@@ -148,12 +151,12 @@ COLLISIONLAYERS
 ================
 Background
 edge 
-lit init mix
+lit init mix test
 start
 empty
 queues
 c1, c2, c3
-rotation
+rot4
 done
 tileN
 tileE
@@ -166,61 +169,72 @@ focus
 RULES
 ======
 
-[done] -> cancel // it's already a win
+[done] -> cancel // it's already a win and we told them
+[init] -> [] call setup
+[mix]  -> [] call scramble
+//[ test clickable ] -> [ click1 clickable ]
+[player] -> call userinput
+[tempobj] -> []
 
-// grow the tree to the edge
-startloop
-  random [ init ][ active no c3 no edge | no active no edge ] -> [ init ][ active temp | temp ]
-// avoid cross tiles
-  [ temp c2 ] -> [ temp c3 ]
-  [ temp c1 ] -> [ temp c2 ]
-  [ temp no c1 no c2 no c3 ] -> [ temp c1 ]
-  right  [ temp | temp ] -> [ tileE | tileW ]
-  up     [ temp | temp ] -> [ tileN | tileS ]
-endloop 
+///////////////////////////////////////////////////////////////////////////////
+//--- initial setup
+segment setup
+  // grow the tree to the edge
+  startloop
+    random [ active no c3 no edge | no active no edge ] -> [ active temp | temp ]
+    // avoid cross tiles
+    [ temp c2 ] -> [ temp c3 ]
+    [ temp c1 ] -> [ temp c2 ]
+    [ temp no c1 no c2 no c3 ] -> [ temp c1 ]
+    right  [ temp | temp ] -> [ tileE | tileW ]
+    up     [ temp | temp ] -> [ tileN | tileS ]
+  endloop 
 
-// scramble the tile rotations 
-[ mix ][ tileNESW no rotation ] -> [ mix ][ tileNESW random rotation ]
-startloop
-  [ mix ][ tileNESW ] -> [ mix ] [ action tileNESW ]
-  [ rr action TileN no TileW ] -> [ rr TileW ]
-  [ rr action TileE no TileN ] -> [ rr TileN ]
-  [ rr action TileS no TileE ] -> [ rr TileE ]
-  [ rr action TileW no TileS ] -> [ rr TileS ]
-  [ rr action TileN no TileW ] -> [ rr TileW ]
-  [ rr action TileE no TileN ] -> [ rr TileN ]
-  [ r90 ] -> [ r0 ]
-  [ r180 ] -> [ r90 ]
-  [ r270 ] -> [ r180 ]
-endloop
-//[ r0 ] -> []
-//[ init ] -> []
-//[ mix ] -> []
-[ tempobj ] -> []
+///////////////////////////////////////////////////////////////////////////////
+//--- scramble the tile rotations 
+segment scramble
+  [ tileNESW no rot4 ] -> [ tileNESW random rot4 ]
+  startloop
+    [ tileNESW ] -> [ action tileNESW ]
+    [ rot3 action TileN no TileW ] -> [ rot3 TileW ]
+    [ rot3 action TileE no TileN ] -> [ rot3 TileN ]
+    [ rot3 action TileS no TileE ] -> [ rot3 TileE ]
+    [ rot3 action TileW no TileS ] -> [ rot3 TileS ]
+    [ rot3 action TileN no TileW ] -> [ rot3 TileW ]
+    [ rot3 action TileE no TileN ] -> [ rot3 TileN ]
+    [ r90 ] -> [ r0 ]
+    [ r180 ] -> [ r90 ]
+    [ r270 ] -> [ r180 ]
+  endloop
 
-[ focus ] -> []
-[ hover clickable ] -> [ clickable focus ]
-
-[ init ][ tileE | tileE | tileE ] -> [ init ][ click1 tileE | tileE | tileE ]
+///////////////////////////////////////////////////////////////////////////////
 // accept a user input
+
+segment userinput
+
+  //[ focus ] -> []
+  //[ hover clickable ] -> [ clickable focus ]
+
   [ click1 tileRL0 ] -> [ click1 tileRL1 ] 
 + [ click1 tileRL0 ] -> [ tileRL0 ]
   [ click2 tileRR0 ] -> [ click2 tileRR1 ] 
 + [ click2 tileRR0 ] -> [ tileRR0 ]
 
-[ lit ] -> []
-[ start ] -> [ start lit ]
-startloop
-  right [ tileE lit | tileW no lit ] -> [ tileE lit | tileW lit ]
-  down  [ tileS lit | tileN no lit ] -> [ tileS lit | tileN lit ]
-  up    [ tileN lit | tileS no lit ] -> [ tileN lit | tileS lit ]
-  left  [ tileW lit | tileE no lit ] -> [ tileW lit | tileE lit ]
-endloop
+// propagate lit to all connected tiles
+  [ lit ] -> []
+  [ start ] -> [ start lit ]
+  startloop
+    right [ tileE lit | tileW no lit ] -> [ tileE lit | tileW lit ]
+    down  [ tileS lit | tileN no lit ] -> [ tileS lit | tileN lit ]
+    up    [ tileN lit | tileS no lit ] -> [ tileN lit | tileS lit ]
+    left  [ tileW lit | tileE no lit ] -> [ tileW lit | tileE lit ]
+  endloop
 
-[ start ] -> [ start done ]
-[ done ][ clickable no lit ] -> [][ clickable ]
-[ done ] -> sfx1
-[ done ] -> status You win! Press R to play again, or Esc to change level.
+// check for win
+  [ start ] -> [ start done ]
+  [ done ][ player no lit ] -> [][ player ]
+  [ done ] -> sfx1
+  [ done ] -> status You win! Press R to play again, or Esc to change level.
 
 ==============
 WINCONDITIONS
@@ -261,6 +275,21 @@ i*************m
 ***************
 
 // test levels
+
+level Single start 13x11 no mix
+i**************
+*t............*
+*.............*
+*.............*
+*.............*
+*.............*
+*......s......*
+*.............*
+*.............*
+*.............*
+*.............*
+*.............*
+***************
 
 level Single start 1x1
 i*m

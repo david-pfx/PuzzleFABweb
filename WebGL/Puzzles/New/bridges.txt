@@ -9,38 +9,49 @@ color_palette mastersystem
 background_color blue
 text_color yellow
 
+noarrows
+noaction
+clicks
+
 ========
 OBJECTS
 ========
-Background .;green
-clickable -;transparent
-lit;yellow
 
 edge *
-blue green lightblue lightgreen
-0123
-3012
-2301
-1230
+blue green lightblue lightgreen darkgreen darkblue yellow red orange
+012345678
+123456780
+234567801
+345678012
+456780123
+567801234
+678012345
+780123456
+801234567
 
 cell
-darkblue
-.000000.
-0......0
-0......0
-0......0
-0......0
-0......0
-0......0
-.000000.
+darkblue green
+1110000000111
+110.......011
+10.........01
+0...........0
+0...........0
+0...........0
+0...........0
+0...........0
+0...........0
+0...........0
+10.........01
+110.......011
+1110000000111
 
 // numbers in cells -- macro would help
 N1;black;resize 0.7;text 1
 N2;black;resize 0.7;text 2
-N3;black;resize 0.7;text 3
-N4;black;resize 0.7;text 4
-N5;black;resize 0.7;text 5
-N6;black;resize 0.7;text 6
+N3;black;resize 0.6;text 3
+N4;black;resize 0.6;text 4
+N5;black;resize 0.6;text 5
+N6;black;resize 0.6;text 6
 N7;black;resize 0.7;text 7
 N8;black;resize 0.7;text 8
 
@@ -58,15 +69,7 @@ darkblue
 
 singlex
 darkblue
-.........
-.........
-.........
-.........
 000000000
-.........
-.........
-.........
-.........
 
 doubley
 darkblue
@@ -82,15 +85,9 @@ darkblue
 
 doublex
 darkblue
-.........
-.........
-.........
 000000000
 .........
 000000000
-.........
-.........
-.........
 
 c0;transparent;text A
 c1;transparent;text B
@@ -101,6 +98,11 @@ c5;transparent;text F
 c6;transparent;text G
 c7;transparent;text H 
 c8;transparent;text I
+
+Background .;green
+player -;transparent
+lit;yellow
+win;transparent
 
 =======
 LEGEND
@@ -120,13 +122,17 @@ double = doubley or doublex
 linex = singlex or doublex
 liney = singley or doubley
 line = single or double
-count  = c0 or c1 or c2 or c3 or c4 or c5 or c6 or c7 or c8
-count1 = c1 or c2 or c3 or c4 or c5 or c6 or c7 or c8 or c8
-count2 = c2 or c3 or c4 or c5 or c6 or c7 or c8 or c8 or c8
+
+// map to add 1 or 2, in reverse order to propagation on rule expansions
+count  = c8 or c7 or c6 or c5 or c4 or c3 or c2 or c1 or c0
+count1 = c8 or c8 or c7 or c6 or c5 or c4 or c3 or c2 or c1
+count2 = c8 or c8 or c8 or c7 or c6 or c5 or c4 or c3 or c2
 
 =======
 SOUNDS
 =======
+
+sfx1 3622903
 
 ================
 COLLISIONLAYERS
@@ -134,66 +140,87 @@ COLLISIONLAYERS
 Background
 edge 
 count lit
-clickable
+player
 line
 cell
 number
+win 
 
 ======
 RULES
 ======
 
-( single line )
-horizontal [ cell    | click1 clickable no line ]            -> [ cell    | clickable action singlex ]
-horizontal [ cell    | action singlex | clickable no line ] -> [ cell    | singlex | clickable action singlex ]
-horizontal [ singlex | action singlex | clickable no line ] -> [ singlex | singlex | clickable action singlex ]
+[ win ] -> cancel // it's already a win and we said so
+[ player ] -> call player move
+[ player ] -> call show lit
+[ player ] -> call check win
 
-horizontal [ cell    | click1 clickable singlex ]            -> [ cell    | clickable action doublex ]
+////////////////////////////////////////////////////////////////////////////////
+segment player move
+// single line left right
+horizontal [ cell    | click1 player no line ]           -> [ cell    | player action singlex ]
+horizontal [ cell    | action singlex | player no line ] -> [ cell    | singlex | player action singlex ]
+horizontal [ singlex | action singlex | player no line ] -> [ singlex | singlex | player action singlex ]
+
+// promote single to double
+horizontal [ cell    | click1 player singlex ]              -> [ cell    | player action doublex ]
 horizontal [ cell    | action doublex | singlex ]           -> [ cell    | doublex | action doublex ]
 horizontal [ doublex | action doublex | singlex ]           -> [ doublex | doublex | action doublex ]
 
-( promote single to double )
-vertical   [ cell    | click2 clickable no line ]            -> [ cell    | clickable action singley ]
-vertical   [ cell    | action singley | clickable no line ] -> [ cell    | singley | clickable action singley ]
-vertical   [ singley | action singley | clickable no line ] -> [ singley | singley | clickable action singley ]
+// single line up down
+vertical   [ cell    | click2 player no line ]           -> [ cell    | player action singley ]
+vertical   [ cell    | action singley | player no line ] -> [ cell    | singley | player action singley ]
+vertical   [ singley | action singley | player no line ] -> [ singley | singley | player action singley ]
 
-vertical   [ cell    | click2 clickable singley ]            -> [ cell    | clickable action doubley ]
+// promote single to double
+vertical   [ cell    | click2 player singley ]              -> [ cell    | player action doubley ]
 vertical   [ cell    | action doubley | singley ]           -> [ cell    | doubley | action doubley ]
 vertical   [ doubley | action doubley | singley ]           -> [ doubley | doubley | action doubley ]
 
-( remove line )
-horizontal [ cell | click1 clickable doublex ] -> [ cell | clickable ]
-vertical   [ cell | click2 clickable doubley ] -> [ cell | clickable ]
+// remove line
+horizontal [ cell | click1 player doublex ] -> [ cell | player ]
+vertical   [ cell | click2 player doubley ] -> [ cell | player ]
 
-( remove loose ends )
-horizontal [ linex | clickable no line ] -> [ | clickable ]
-vertical   [ liney | clickable no line ] -> [ | clickable ]
+// remove loose ends
+horizontal [ linex | player no line ] -> [ | player ]
+vertical   [ liney | player no line ] -> [ | player ]
 
-[ cell ] -> [ cell c0 ]
-up    [ cell count | singley ] -> [ cell count1 | singley ]
-down  [ cell count | singley ] -> [ cell count1 | singley ]
-left  [ cell count | singlex ] -> [ cell count1 | singlex ]
-right [ cell count | singlex ] -> [ cell count1 | singlex ]
-up    [ cell count | doubley ] -> [ cell count2 | doubley ]
-down  [ cell count | doubley ] -> [ cell count2 | doubley ]
-left  [ cell count | doublex ] -> [ cell count2 | doublex ]
-right [ cell count | doublex ] -> [ cell count2 | doublex ]
+////////////////////////////////////////////////////////////////////////////////
+segment show lit
 
-[ lit ] -> [ ]
-[ 1 c1 ] -> [ 1 lit ]
-[ 2 c2 ] -> [ 2 lit ]
-[ 3 c3 ] -> [ 3 lit ]
-[ 4 c4 ] -> [ 4 lit ]
-[ 5 c5 ] -> [ 5 lit ]
-[ 6 c6 ] -> [ 6 lit ]
-[ 7 c7 ] -> [ 7 lit ]
-[ 8 c8 ] -> [ 8 lit ]
+// calculate a count for each cell, using the final prefix so the rule applies only once
+            [ cell ] -> [ cell c0 ]
+up    final [ cell count | singley ] -> [ cell count1 | singley ]
+down  final [ cell count | singley ] -> [ cell count1 | singley ]
+left  final [ cell count | singlex ] -> [ cell count1 | singlex ]
+right final [ cell count | singlex ] -> [ cell count1 | singlex ]
+up    final [ cell count | doubley ] -> [ cell count2 | doubley ]
+down  final [ cell count | doubley ] -> [ cell count2 | doubley ]
+left  final [ cell count | doublex ] -> [ cell count2 | doublex ]
+right final [ cell count | doublex ] -> [ cell count2 | doublex ]
+
+// light up every cell where the count matches
+    [ lit ] -> [ ]
+    [ 1 c1 ] -> [ 1 lit ]
+    [ 2 c2 ] -> [ 2 lit ]
+    [ 3 c3 ] -> [ 3 lit ]
+    [ 4 c4 ] -> [ 4 lit ]
+    [ 5 c5 ] -> [ 5 lit ]
+    [ 6 c6 ] -> [ 6 lit ]
+    [ 7 c7 ] -> [ 7 lit ]
+    [ 8 c8 ] -> [ 8 lit ]
+
+segment check win
+[ player ] -> [ player win ]
+[ cell no lit ][ player win ] -> [ cell ][ player ]
+[ win ] -> sfx1
+[ win ] -> status You win! Press R to play again, or Esc to select level.
 
 ==============
 WINCONDITIONS
 ==============
 
- all cell on lit
+//all cell on lit
 
 =======
 LEVELS

@@ -6,9 +6,11 @@ comment //
 endline ;
 background_color lightbrown
 text_color darkblue
-//hover
 run_rules_on_level_start
-//reset_on_level_finish
+noarrows
+noaction
+clicks
+//hove«r
 
 ========
 OBJECTS
@@ -77,16 +79,15 @@ NH ; blue; scale 0.7; text H
 
 // testing
 target; transparent grey
-//0000110000
-//0000110000
+0000110000
+0000110000
 
-//target; transparent
 Background .; lightgreen
 edge *; orange
 cover C; blue
 
 // click this to check solution
-done; black ; text ?
+done; black; text ?
 lit; yellow
 
 noball; transparent   // space when not a ball
@@ -119,7 +120,7 @@ X = noball and grid
 S = cover and target // for setup
 B = cover and ball // for ball placing
 
-clickable = done or nonum or ball or noball or grid
+player = done or nonum or ball or noball or grid
 nums = N1 or N2 or N3 or N4 or N5 or N6 or N7 or N8 or N9 or N10 or N11 or N12 or NH or NR 
 paths = PS or PQ or pend or PPup or PPdown or PPright or PPleft
 
@@ -130,6 +131,7 @@ SOUNDS
 ball create 97204707
 iswin create 89109903
 nums create 66048707
+wrong create 72684102
 
 ================
 COLLISIONLAYERS
@@ -148,23 +150,26 @@ focus
 RULES
 ======
 
-//[ cover target ][ nums ] -> [ cover target ][ ]
+[ iswin ] -> cancel
+[ wrong ] -> []
+
+[ cover target ] -> call initialise
+[ player ] -> call user input
+[ click1 done lit ] -> call check for win
+[ player ] -> call update display
+
+////////////////////////////////////////////////////////////////////////////////
+segment initialise
+
 // place one target at random for each S in the level
 startloop
   random [ cover target ][ grid no target ] -> [ cover nonum ][ grid target ]
 endloop
 
-[ wrong ] -> [ ]
-[ temp ] -> [ ]
-//FAB: settable flag with IF
+////////////////////////////////////////////////////////////////////////////////
+segment user input
 
 // manage focus
-
-[ iswin ][ hover clickable ] -> cancel
-[ iswin ][ click1 clickable ] -> restart
-
-//[ focus ] -> [ ]
-//[ hover clickable ] -> [ focus clickable ]
 
 // place or remove a solution ball on the grid
 [ click1 noball ][ ball cover ] -> [ ball ][ noball cover ]
@@ -178,15 +183,8 @@ endloop
 [ done ] -> [ done lit ]
 [ done lit ][ ball cover ] -> [ done ][ ball cover ]
 
-// check for win
-[ click1 done lit ] -> [ done lit temp ]
-[ lit temp ][ ball no target ] -> [ lit temp ][ ball wrong ]
-[ lit temp ][ wrong ] -> [ lit temp wrong ][ wrong ]
-[ lit temp no wrong ] -> [ lit temp iswin ]
-
-[ iswin ] -> status You win! Another game?
-[ wrong ] -> status Not this time buster!
-[ lit no iswin no wrong ] -> status Click on ? to see if you're right!
+////////////////////////////////////////////////////////////////////////////////
+segment update display
 
 //FAB extension: expand relative directions with token pasting
 // so [ PP:> ] becomes [ PP:right ] etc x4
@@ -237,6 +235,19 @@ endloop
 [ pend ][ N1 ] -> [ N2 ][ N1 ]
 [ pend ]       -> [ N1 ]
 
+================================================================================
+segment check for win
+
+// check for win
+[ click1 done lit ] -> [ done lit temp ]
+[ lit temp ][ ball no target ] -> [ lit temp ][ ball wrong ]
+[ lit temp ][ wrong ] -> [ lit temp wrong ][ wrong ]
+[ lit temp no wrong ] -> [ lit temp iswin ]
+
+[ iswin ] -> status You win! Hit R to play again or Esc for a different level
+[ wrong ] -> status Not this time buster!
+[ lit no iswin no wrong ] -> status Click on ? to see if you're right!
+
 ==============
 WINCONDITIONS
 ==============
@@ -247,7 +258,7 @@ WINCONDITIONS
 LEVELS
 =======
 
-message Click on the edge to send rays bouncing off targets
+message Click on the edge to send rays bouncing off hidden targets
 
 
 level 10x10, 5 balls
@@ -285,7 +296,7 @@ CExxxxxEC
 CExxxxxEC
 C*EEEEE*C
 
-level test 10x10, 5 balls
+(level test 10x10, 5 balls
 DEEEEEEEEEE*B
 ExxxxxxxxxTEB
 ExxxxxxxxTxEB
@@ -297,5 +308,5 @@ ExxxxxxxxxxEC
 ExxxxxxxxxxEC
 ExTxxxxxxxxEC
 ETxxxxxxxxxEC
-*EEEEEEEEEE*C
+*EEEEEEEEEE*C)
 

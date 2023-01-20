@@ -8,8 +8,7 @@ endline ;
 background_color lightbrown
 text_color darkblue
 run_rules_on_level_start
-enable_hover
-enable_click
+hover
 
 ========
 OBJECTS
