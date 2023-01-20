@@ -24,5 +24,5 @@ Press Escape and the Pause screen will allow you to select other games, or try t
 
 [Bridges](https://david-pfx.github.io/PuzzleFABweb/WebGL?p=Puzzles/New/bridges.txt) shows mouse and text.
 
-You can play any PuzzleScript game in this player as long as it can be found on the Web. Juse use the 'u' switch and give the complete URL, like this: 
+You can play any PuzzleScript game in this player as long as it can be found on the Web. Just use the 'u' switch and give the complete URL, like this: 
 [WhaleWorld](https://david-pfx.github.io/PuzzleFABweb/WebGL?u=https://david-pfx.github.io/PuzzleFABweb/whaleworld.txt)
