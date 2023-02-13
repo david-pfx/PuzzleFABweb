@@ -10,9 +10,7 @@ More about PuzzleScript on the [blog](http://www.polyomino.com/puzzlescript) or 
 PuzzleFAB has players for Windows desktop, Linux, WebGL, Android, iOS and more. 
 This is the PuzzleFAB Web Player. Just click the link and enjoy!.
 
-The default game is [2048](https://david-pfx.github.io/PuzzleFABweb/WebGL), showing mouse clicks, text and high res objects.
-
-Press Escape and the Pause screen will allow you to select other games, or try these links, or play your own games.
+The default game is [Yet Another Sokoban](https://david-pfx.github.io/PuzzleFABweb/WebGL). Press Escape and the Pause screen will allow you to select other games, or try these links, or play your own games.
 
 [333](https://david-pfx.github.io/PuzzleFABweb/WebGL/?p=Puzzles/New/333.txt), showing mouse clicks, text and high res objects.
 
